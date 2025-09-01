@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Card</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./style.css">
+
+
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/3f2e6e3f4b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="card">
+    <div class="search-box">
+      <input type="text" id="input" placeholder="City Name">
+      <i onclick="Cityname()" class="fas fa-search"></i>
+    </div>
+
+            <div class="area"></div>
+            <br>
+            <div class="date"></div>
+            <br>
+            <div class="temp"></div>
+            <div>
+              <img class="weather-icon" src="" alt="">
+            </div>
+    <div class="condition"></div>
+
+    <div class="details">
+      <div><i class="fas fa-water"></i> <p class="humidity">%</p> Humidity</div>
+      <div><i class="fas fa-wind"></i><p class="wind-speed"></p> Km/h</div>
+    </div>
+  </div>
+</body>
+<script>
+    function Cityname(){
+        let city = document.querySelector("#input").value;
+
+    if(city==""){
+            alert("Enter place you want to search")
+        }
+    else{   
+         let response = fetch(`http://api.weatherapi.com/v1/current.json?key=6d0976c6d4114cd59cb123503252108&q=${city}&aqi=yes`).then((res)=>res.json()).then((data)=>{
+            document.querySelector(".area").innerHTML= `${data.location.name}ˏ${data.location.region}ˏ${data.location.country}`
+            let date = data.current.last_updated;
+            date.trim(0,9)
+            document.querySelector(".date").innerHTML= `${date}`;
+            document.querySelector(".condition").innerHTML= `${data.current.condition.text}`;
+            document.querySelector(".temp").innerHTML= `${data.current.temp_c}°C`
+            document.querySelector(".humidity").innerHTML = `${data.current.humidity}%`;
+            document.querySelector(".wind-speed").innerHTML = `${data.current.wind_kph}`;
+            document.querySelector(".weather-icon").src = `${data.current.condition.icon}`;
+            
+            console.log(data);
+        })
+        }
+        
+    }
+</script>
+</html>
